@@ -1,0 +1,63 @@
+echo "# BharatIntern_ML" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/tarakantaacharya/BharatIntern_ML.git
+git push -u origin main
+
+#Loading the datset 
+import numpy as np
+import pandas as pd
+d=pd.read_csv('housing_price_dataset.csv')
+print(d)
+
+X=d.iloc[:,[0,1,2]]
+Y=d.iloc[:,5]
+from sklearn.model_selection import train_test_split
+X_train,X_test,Y_train,Y_test=train_test_split(X,Y,test_size=0.2,random_state=0)
+
+from sklearn.linear_model import LinearRegression
+b=LinearRegression()
+b.fit(X_train,Y_train)
+predictions=b.predict(X_test)
+
+print('Train Score: ', b.score(X_train, Y_train))
+print('Test Score: ', b.score(X_test, Y_test))
+
+from sklearn.metrics import mean_squared_error
+mse = mean_squared_error(Y_test, y_pred)
+print("First Mean Squared Error:", mse)
+
+
+#using tensorflow to reduce the mse
+import tensorflow as tf
+from sklearn.model_selection import train_test_split
+from tensorflow.keras.metrics import MeanSquaredError  
+
+model = tf.keras.Sequential([
+    tf.keras.layers.Dense(64, activation='relu', input_shape=(X_train.shape[1],)),
+    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dense(1)])
+
+model.compile(optimizer='adam', loss='mse')
+
+early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=3)
+
+history = model.fit(X_train, Y_train, epochs=50, batch_size=32,validation_split=0.2, callbacks=[early_stopping] if early_stopping else [])
+
+y_pred = model.predict(X_test)
+
+mse_metric = MeanSquaredError()
+mse = mse_metric(Y_test, y_pred)
+
+print("Mean Squared Error:", mse.numpy())  
+  
+
+
+#prediction of a new data
+df2={'SquareFeet':2854,'Bedrooms':3.5,'Bathrooms':2}
+df2=pd.DataFrame(df2,index=[0])
+print(df2)
+predictions=b.predict(df2)
+print(predictions)

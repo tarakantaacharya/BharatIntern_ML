@@ -1,4 +1,3 @@
-#load the data
 import numpy as np
 import pandas as pd
 df3=pd.read_csv('IRIS (1).csv')
@@ -6,14 +5,18 @@ x=df3.drop('species',axis=1)
 Y=df3['species']
 import sklearn.model_selection as ms
 x_train,x_test,Y_train,Y_test=ms.train_test_split(x,Y,test_size=0.2)
+import sklearn.neighbors as nb
 knn1=nb.KNeighborsClassifier(n_neighbors=6)
 knn1.fit(x_train,Y_train)
 Y_pred2=knn1.predict(x_test)
 from sklearn.metrics import accuracy_score
 acc2=accuracy_score(Y_test,Y_pred2)
-print('Old test accuracy:',acc2*100)
+print('Old Test Accuracy:',acc2*100)
+Y_pred3=knn1.predict(x_train)
+from sklearn.metrics import accuracy_score
+acc4=accuracy_score(Y_train,Y_pred3)
+print('Old Train Accuracy:',acc4*100)
 
-#using tensorflow to increase the accuracy
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Flatten, Dense
@@ -35,13 +38,11 @@ validation_accuracy = history.history['val_accuracy']
 print('Training accuracy:',training_accuracy[-1]*100)
 print('Validation accuracy:',validation_accuracy[-1]*100)
 
-#After tensorflow new accuracy 
 train_loss = history.history['loss']
 val_loss = history.history['val_loss']
 test_loss, test_acc = model.evaluate(x_test,Y_test_encoded)
-print('New test accuracy:', test_acc*100)
+print('New Test accuracy:', test_acc*100)
 
-#prediction for a new data
 df4={'sepal_length':2.0,'sepal_width':4.6,'petal_length':1.8,'petal_width':0.5}
 df4=pd.DataFrame(df4,index=[0])
 prediction=knn1.predict(df4)

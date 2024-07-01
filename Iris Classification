@@ -11,7 +11,7 @@ knn1.fit(x_train,Y_train)
 Y_pred2=knn1.predict(x_test)
 from sklearn.metrics import accuracy_score
 acc2=accuracy_score(Y_test,Y_pred2)
-print(acc2*100)
+print('Old test accuracy:',acc2*100)
 
 #using tensorflow to increase the accuracy
 import tensorflow as tf
@@ -39,7 +39,7 @@ print('Validation accuracy:',validation_accuracy[-1]*100)
 train_loss = history.history['loss']
 val_loss = history.history['val_loss']
 test_loss, test_acc = model.evaluate(x_test,Y_test_encoded)
-print('Test accuracy:', test_acc*100)
+print('New test accuracy:', test_acc*100)
 
 #prediction for a new data
 df4={'sepal_length':2.0,'sepal_width':4.6,'petal_length':1.8,'petal_width':0.5}
